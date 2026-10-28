@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Búnaður slökkvibíla</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: sticky vehicle band + progress, then one stacked card per compartment, action bar at the foot. */
+:root{
+  --bg:#f3f1ef; --surface:#ffffff; --line:#ddd7d2; --fg:#1f1a18; --muted:#6c625d;
+  --red:#b3201b; --red-ink:#ffffff; --ok:#1f7a45; --ok-bg:#e3f2e8; --miss:#b3201b; --miss-bg:#fbe5e3;
+  --plate:#ffffff; --plate-ink:#1a2a6c;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171312; --surface:#221d1b; --line:#3a322f; --fg:#f1ebe7; --muted:#a99d97;
+  --red:#d9433a; --red-ink:#ffffff; --ok:#5cc489; --ok-bg:#183424; --miss:#ff7a70; --miss-bg:#3d1c19;
+  --plate:#e9e9ee; --plate-ink:#1a2a6c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171312; --surface:#221d1b; --line:#3a322f; --fg:#f1ebe7; --muted:#a99d97;
+  --red:#d9433a; --red-ink:#ffffff; --ok:#5cc489; --ok-bg:#183424; --miss:#ff7a70; --miss-bg:#3d1c19;
+  --plate:#e9e9ee; --plate-ink:#1a2a6c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--red)}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.band{background:var(--red);color:var(--red-ink);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+header .wrap{padding-block:12px 10px;display:flex;flex-direction:column;gap:8px}
+.idrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.call{font-family:var(--display);font-weight:700;font-size:34px;line-height:1;letter-spacing:.02em}
+.unit{font-family:var(--display);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.06em;opacity:.9}
+.plate{margin-left:auto;background:var(--plate);color:var(--plate-ink);font-family:var(--mono);font-weight:500;font-size:15px;padding:3px 10px;border-radius:4px;border:2px solid var(--plate-ink);letter-spacing:.08em;white-space:nowrap}
+.prog{display:flex;align-items:center;gap:10px;font-size:13px;font-variant-numeric:tabular-nums}
+.bar{flex:1;height:8px;background:rgba(255,255,255,.25);border-radius:4px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .b-ok{background:#ffffff}.bar .b-miss{background:#ffd23f}
+main.wrap{padding-block:16px 32px;display:flex;flex-direction:column;gap:14px}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.meta label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+input[type=text],input[type=date],input[type=email]{font:inherit;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%;min-width:0}
+.intro{font-size:13px;color:var(--muted);margin:0}
+section.comp{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.comp>h2{margin:0;display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:.02em;text-wrap:balance}
+.comp>h2 .cnt{font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.comp>h2 .all{margin-left:auto}
+.item{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:10px 12px;border-top:1px solid var(--line);border-left:4px solid transparent}
+.comp>h2+.item{border-top:0}
+.item.s-ok{border-left-color:var(--ok)}
+.item.s-miss{border-left-color:var(--miss);background:var(--miss-bg)}
+.name{font-weight:600;min-width:0}
+.sub{display:flex;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:2px}
+.qty{font-family:var(--mono);font-size:12.5px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 6px}
+.loc::before{content:"↳ "}
+.btns{display:flex;gap:6px;align-self:center}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:7px 11px;font-size:13.5px;font-weight:500}
+button:focus-visible,input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.st[aria-pressed=true].ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.st[aria-pressed=true].miss{background:var(--miss);border-color:var(--miss);color:#fff}
+.pw{grid-column:1/-1;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 8px;border-radius:6px;background:var(--bg);border:1px dashed var(--line)}
+.pwl{font-size:12.5px;font-weight:600;color:var(--muted);margin-right:auto}
+.pw.p-good{border-style:solid;border-color:var(--ok)}
+.pw.p-bad{border-style:solid;border-color:var(--miss)}
+.pb[aria-pressed=true].good{background:var(--ok);border-color:var(--ok);color:#fff}
+.pb[aria-pressed=true].bad{background:var(--miss);border-color:var(--miss);color:#fff}
+.note{grid-column:1/-1}
+.note input{font-size:14px;padding:6px 9px}
+.small{font-size:12.5px;padding:5px 9px}
+.actions{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.actions h2{margin:0;font-family:var(--display);font-size:21px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.primary{background:var(--red);border-color:var(--red);color:var(--red-ink);font-weight:600}
+.msg{font-size:13.5px;margin:0;color:var(--muted)}
+.addr{color:var(--fg);user-select:all;font-weight:600}
+.fuel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.fuel h2{margin:0;font-family:var(--display);font-weight:700;font-size:21px}
+.seg{display:flex;flex:1 1 260px;min-width:0;max-width:420px}
+.seg button{flex:1;border-radius:0;margin-left:-1px;font-size:17px;font-weight:600;padding:8px 4px}
+.seg button:first-child{border-radius:6px 0 0 6px;margin-left:0}
+.seg button:last-child{border-radius:0 6px 6px 0;font-size:14px;flex:1.6}
+.seg button[aria-pressed=true]{background:var(--fg);border-color:var(--fg);color:var(--bg);position:relative}
+.fuel .msg{flex-basis:100%}
+.msg.warn{color:var(--miss);font-weight:500}
+textarea{width:100%;min-height:140px;font:13px/1.4 var(--mono);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px}
+@media (max-width:480px){
+  .meta{grid-template-columns:1fr}
+  .item{padding:9px 10px;gap:6px 8px}
+  .btns button.st{padding:7px 8px;font-size:13px}
+  .call{font-size:30px}
+}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .2s}}
+</style>
+<style>
+body{margin:0}
+.cars{display:flex;flex-direction:column;gap:10px}
+a.car{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--red);border-radius:8px;padding:14px 16px;color:var(--fg);text-decoration:none}
+a.car:hover{border-color:var(--red)}
+a.car:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+a.car .call{font-size:30px}
+a.car .unitname{font-family:var(--display);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+@media (max-width:420px){a.car .call{font-size:25px} a.car .unitname{font-size:16px;letter-spacing:.03em}}
+h1{margin:0;font-family:var(--display);font-weight:700;font-size:30px;letter-spacing:.02em}
+</style>
+</head>
+<body>
+<header class="band"><div class="wrap"><h1>Búnaður slökkvibíla</h1></div></header>
+<main class="wrap">
+<p class="intro">Veldu bíl til að fara yfir búnaðinn. Niðurstaðan er send á slokkvilid@isafjordur.is.</p>
+<nav class="cars" aria-label="Bílar">
+<a class="car" href="slokkvibill-41-131.html"><span class="call">41-131</span><span class="unitname">Bíll 1</span><span class="plate">MY-F54</span></a>
+<a class="car" href="slokkvibill-41-132.html"><span class="call">41-132</span><span class="unitname">Bíll 2</span><span class="plate">TN-115</span></a>
+<a class="car" href="korfubill-41-141.html"><span class="call">41-141</span><span class="unitname">Körfubíll</span><span class="plate">NH-587</span></a>
+<a class="car" href="tankbill-41-151.html"><span class="call">41-151</span><span class="unitname">Tankari</span><span class="plate">KO-750</span></a>
+</nav>
+</main>
+</body>
+</html>

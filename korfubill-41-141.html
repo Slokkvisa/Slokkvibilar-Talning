@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Búnaður 41-141 Körfubíll</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: sticky vehicle band + progress, then one stacked card per compartment, action bar at the foot. */
+:root{
+  --bg:#f3f1ef; --surface:#ffffff; --line:#ddd7d2; --fg:#1f1a18; --muted:#6c625d;
+  --red:#b3201b; --red-ink:#ffffff; --ok:#1f7a45; --ok-bg:#e3f2e8; --miss:#b3201b; --miss-bg:#fbe5e3;
+  --plate:#ffffff; --plate-ink:#1a2a6c;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --body:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171312; --surface:#221d1b; --line:#3a322f; --fg:#f1ebe7; --muted:#a99d97;
+  --red:#d9433a; --red-ink:#ffffff; --ok:#5cc489; --ok-bg:#183424; --miss:#ff7a70; --miss-bg:#3d1c19;
+  --plate:#e9e9ee; --plate-ink:#1a2a6c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171312; --surface:#221d1b; --line:#3a322f; --fg:#f1ebe7; --muted:#a99d97;
+  --red:#d9433a; --red-ink:#ffffff; --ok:#5cc489; --ok-bg:#183424; --miss:#ff7a70; --miss-bg:#3d1c19;
+  --plate:#e9e9ee; --plate-ink:#1a2a6c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--red)}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.band{background:var(--red);color:var(--red-ink);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+header .wrap{padding-block:12px 10px;display:flex;flex-direction:column;gap:8px}
+.idrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.call{font-family:var(--display);font-weight:700;font-size:34px;line-height:1;letter-spacing:.02em}
+.unit{font-family:var(--display);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.06em;opacity:.9}
+.plate{margin-left:auto;background:var(--plate);color:var(--plate-ink);font-family:var(--mono);font-weight:500;font-size:15px;padding:3px 10px;border-radius:4px;border:2px solid var(--plate-ink);letter-spacing:.08em;white-space:nowrap}
+.prog{display:flex;align-items:center;gap:10px;font-size:13px;font-variant-numeric:tabular-nums}
+.bar{flex:1;height:8px;background:rgba(255,255,255,.25);border-radius:4px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .b-ok{background:#ffffff}.bar .b-miss{background:#ffd23f}
+main.wrap{padding-block:16px 32px;display:flex;flex-direction:column;gap:14px}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.meta label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+input[type=text],input[type=date],input[type=email]{font:inherit;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%;min-width:0}
+.back{color:var(--red);font-weight:600;text-decoration:none;font-size:14px}
+.back:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.intro{font-size:13px;color:var(--muted);margin:0}
+section.comp{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.comp>h2{margin:0;display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:.02em;text-wrap:balance}
+.comp>h2 .cnt{font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.comp>h2 .all{margin-left:auto}
+.item{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:10px 12px;border-top:1px solid var(--line);border-left:4px solid transparent}
+.comp>h2+.item{border-top:0}
+.item.s-ok{border-left-color:var(--ok)}
+.item.s-miss{border-left-color:var(--miss);background:var(--miss-bg)}
+.name{font-weight:600;min-width:0}
+.sub{display:flex;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:2px}
+.qty{font-family:var(--mono);font-size:12.5px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 6px}
+.loc::before{content:"↳ "}
+.btns{display:flex;gap:6px;align-self:center}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:7px 11px;font-size:13.5px;font-weight:500}
+button:focus-visible,input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.st[aria-pressed=true].ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.st[aria-pressed=true].miss{background:var(--miss);border-color:var(--miss);color:#fff}
+.pw{grid-column:1/-1;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 8px;border-radius:6px;background:var(--bg);border:1px dashed var(--line)}
+.pwl{font-size:12.5px;font-weight:600;color:var(--muted);margin-right:auto}
+.pw.p-good{border-style:solid;border-color:var(--ok)}
+.pw.p-bad{border-style:solid;border-color:var(--miss)}
+.pb[aria-pressed=true].good{background:var(--ok);border-color:var(--ok);color:#fff}
+.pb[aria-pressed=true].bad{background:var(--miss);border-color:var(--miss);color:#fff}
+.note{grid-column:1/-1}
+.note input{font-size:14px;padding:6px 9px}
+.small{font-size:12.5px;padding:5px 9px}
+.actions{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.actions h2{margin:0;font-family:var(--display);font-size:21px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.primary{background:var(--red);border-color:var(--red);color:var(--red-ink);font-weight:600}
+.msg{font-size:13.5px;margin:0;color:var(--muted)}
+.addr{color:var(--fg);user-select:all;font-weight:600}
+.fuel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.fuel h2{margin:0;font-family:var(--display);font-weight:700;font-size:21px}
+.seg{display:flex;flex:1 1 260px;min-width:0;max-width:420px}
+.seg button{flex:1;border-radius:0;margin-left:-1px;font-size:17px;font-weight:600;padding:8px 4px}
+.seg button:first-child{border-radius:6px 0 0 6px;margin-left:0}
+.seg button:last-child{border-radius:0 6px 6px 0;font-size:14px;flex:1.6}
+.seg button[aria-pressed=true]{background:var(--fg);border-color:var(--fg);color:var(--bg);position:relative}
+.fuel .msg{flex-basis:100%}
+.msg.warn{color:var(--miss);font-weight:500}
+textarea{width:100%;min-height:140px;font:13px/1.4 var(--mono);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px}
+@media (max-width:480px){
+  .meta{grid-template-columns:1fr}
+  .item{padding:9px 10px;gap:6px 8px}
+  .btns button.st{padding:7px 8px;font-size:13px}
+  .call{font-size:30px}
+}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .2s}}
+</style>
+
+<header class="band">
+  <div class="wrap">
+    <div class="idrow">
+      <span class="call" id="call"></span>
+      <span class="unit" id="unit"></span>
+      <span class="plate" id="plate"></span>
+    </div>
+    <div class="prog">
+      <div class="bar" aria-hidden="true"><i class="b-ok" id="bok"></i><i class="b-miss" id="bmiss"></i></div>
+      <span id="progtxt"></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <a class="back" href="index.html">← Allir bílar</a>
+  <p class="intro">Hægri og vinstri hlið miðast við akstursstefnu. Merktu hvern hlut „Til staðar“ eða „Vantar“. Staðan vistast í þessum vafra.</p>
+  <div class="meta">
+    <label for="who">Skráð af<input type="text" id="who" autocomplete="name" placeholder="Nafn"></label>
+    <label for="date">Dagsetning<input type="date" id="date"></label>
+  </div>
+  <section class="fuel" aria-labelledby="fh">
+    <h2 id="fh">Eldsneyti bíls</h2>
+    <div class="seg" role="group" aria-labelledby="fh" id="fuel">
+      <button data-f="Undir 1/4" aria-pressed="false">&lt;¼</button>
+      <button data-f="1/4" aria-pressed="false">¼</button>
+      <button data-f="1/2" aria-pressed="false">½</button>
+      <button data-f="3/4" aria-pressed="false">¾</button>
+      <button data-f="Fullur" aria-pressed="false">Fullur</button>
+    </div>
+    <p class="msg warn" id="fuelwarn" hidden>Lítið eldsneyti. Fylla þarf á bílinn.</p>
+  </section>
+  <div id="list"></div>
+
+  <section class="actions" aria-labelledby="ah">
+    <h2 id="ah">Senda niðurstöðu</h2>
+    <p class="msg" id="summary"></p>
+    <p class="msg">Sendist á <strong class="addr">slokkvilid@isafjordur.is</strong></p>
+    <div class="row">
+      <button class="primary" id="mail">Senda lista yfir það sem vantar</button>
+      <button id="copy">Afrita samantekt</button>
+    </div>
+    <p class="msg" id="mailmsg" hidden></p>
+    <textarea id="out" readonly hidden aria-label="Samantekt"></textarea>
+    <div class="row">
+      <button id="reset" class="small">Hreinsa allar merkingar</button>
+      <span id="confirm" hidden class="row"><span class="msg warn">Hreinsa allt?</span><button id="yes" class="small">Já, hreinsa</button><button id="no" class="small">Hætta við</button></span>
+    </div>
+  </section>
+</main>
+
+<script>
+const V = {"call": "41-141", "plate": "NH-587", "unit": "Körfubíll", "sections": [{"name": "Ökumannshús", "items": [["Tetra handstöð", "1", ""], ["VHF handstöð", "1", ""], ["VHF handstöð v/ reykköfun", "1", ""], ["Reykköfunartæki", "1", ""], ["Headsett Tetra", "1", ""], ["Fjarstýring", "1", ""]]}, {"name": "Vinstri hlið skápur 1", "items": [["Framlengingar rafmagnssnúra", "1", ""], ["Rafmagnskefli", "1", ""], ["Slípirokkur", "1", "Taska slípirokkur", "bat"], ["Skífur fyrir slípirokk", "Ca 10", "Taska slípirokkur"], ["Lyfill fyrir slípirokk", "1", "Taska slípirokkur"], ["Sverðsög", "1", "Taska sverðsög", "bat"], ["Blað í sverðsög", "3", "Taska sverðsög"], ["Rafhlöður milwaukee", "2", "Taska sverðsög", "bat"], ["Stingsög", "1", "Taska stingsög", "bat"], ["Blöð í stingsög", "3", "Taska stingsög"]]}, {"name": "Vinstri hlið skápur 2", "items": [["Strappar fyrir recue körfu", "3", ""], ["Kaðlar", "2", ""], ["Hjálmar", "5", ""], ["Drykkir", "slatti", ""]]}, {"name": "Vinstri hlið skápur", "items": [["3” slöngur", "3", ""], ["Stortz lyklar", "1 par", ""], ["Stútur ameríka?", "1", ""]]}, {"name": "Hægri hlið skápur 2", "items": [["Öryggis harness", "2", "taska"], ["Mittisólar", "2", "plastkassi"], ["Öryggis harness", "3", "plastkassi"], ["Öryggislína tvöföld", "1", ""], ["Öryggislína einföld", "1", ""], ["Aðvörunarveifur", "hellingur", ""]]}, {"name": "Hægri hlið skápur 3", "items": [["3” slöngur", "3", ""], ["2” slöngur", "1", ""], ["Stútur", "1", ""]]}, {"name": "Upp á bíl", "items": [["Stigi", "1", ""], ["Monitor", "1", ""], ["Plattar fyrir fætur", "4", ""], ["Besínbrúsar", "2", ""], ["Björgunarkarfa", "1", ""], ["Ljósavél", "1", "", "fuel"]]}]};
+const KEY = "bunadur-" + V.call;
+const TO = "slokkvilid@isafjordur.is";
+let S = {status:{}, notes:{}, power:{}, who:"", date:"", fuel:""};
+try { const s = JSON.parse(localStorage.getItem(KEY)||"null"); if (s) S = Object.assign(S, s); } catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+const $ = id => document.getElementById(id);
+$("call").textContent = V.call; $("unit").textContent = V.unit; $("plate").textContent = V.plate;
+const today = new Date(); const iso = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+$("date").value = S.date || iso; $("who").value = S.who;
+["who","date"].forEach(k => $(k).addEventListener("input", e => { S[k] = e.target.value; save(); }));
+
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const all = [];
+V.sections.forEach((sec, si) => {
+  const el = document.createElement("section"); el.className = "comp";
+  let h = `<h2><span>${esc(sec.name)}</span><span class="cnt" id="c${si}"></span><button class="small all" data-sec="${si}">Allt til staðar</button></h2>`;
+  sec.items.forEach((it, ii) => {
+    const id = si+"-"+ii; all.push({id, si, it});
+    h += `<div class="item" id="i${id}">
+      <div><div class="name">${esc(it[0])}</div>
+        <div class="sub"><span class="qty">${it[1] ? esc(it[1]) : "–"}</span>${it[2] ? `<span class="loc">${esc(it[2])}</span>` : ""}</div></div>
+      <div class="btns" role="group" aria-label="Staða: ${esc(it[0])}">
+        <button class="st ok" data-id="${id}" data-v="ok" aria-pressed="false">Til staðar</button>
+        <button class="st miss" data-id="${id}" data-v="miss" aria-pressed="false">Vantar</button>
+      </div>
+      ${it[3] ? `<div class="pw" role="group" aria-label="${it[3]==="fuel"?"Eldsneytisstaða":"Rafhlöðustaða"}: ${esc(it[0])}">
+        <span class="pwl">${it[3]==="fuel"?"Eldsneytisstaða":"Rafhlöðustaða"}</span>
+        <button class="pb good small" data-p="${id}" data-v="good" aria-pressed="false">Í lagi</button>
+        <button class="pb bad small" data-p="${id}" data-v="bad" aria-pressed="false">Ekki í lagi</button>
+      </div>` : ""}
+      <div class="note" id="n${id}" hidden><input type="text" id="note-${id}" data-id="${id}" placeholder="Athugasemd (t.d. hversu mikið vantar)"></div>
+    </div>`;
+  });
+  el.innerHTML = h; $("list").appendChild(el);
+});
+
+function paint(){
+  let ok=0, miss=0;
+  all.forEach(({id}) => {
+    const v = S.status[id]; const row = $("i"+id);
+    row.className = "item" + (v==="ok"?" s-ok":v==="miss"?" s-miss":"");
+    row.querySelectorAll(".st").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v===v)));
+    const p = S.power[id];
+    row.querySelectorAll(".pb").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v===p)));
+    const pw = row.querySelector(".pw"); if (pw) { pw.hidden = v==="miss"; pw.className = "pw" + (p==="good"?" p-good":p==="bad"?" p-bad":""); }
+    $("n"+id).hidden = !(v==="miss" || (p==="bad" && v!=="miss"));
+    const ni = $("note-"+id); if (document.activeElement!==ni) ni.value = S.notes[id]||"";
+    if (v==="ok") ok++; else if (v==="miss") miss++;
+  });
+  V.sections.forEach((sec, si) => {
+    const ids = sec.items.map((_,ii)=>si+"-"+ii);
+    const done = ids.filter(i=>S.status[i]).length;
+    $("c"+si).textContent = done+"/"+ids.length;
+  });
+  document.querySelectorAll("#fuel button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.f===S.fuel)));
+  $("fuelwarn").hidden = !(S.fuel==="Undir 1/4" || S.fuel==="1/4");
+  const n = all.length;
+  $("bok").style.width = (ok/n*100)+"%"; $("bmiss").style.width = (miss/n*100)+"%";
+  $("progtxt").textContent = `${ok+miss}/${n} yfirfarið · ${miss} vantar`;
+  const left = n-ok-miss; const pc = powerCounts();
+  $("summary").textContent = (left ? `${left} hlutir eru enn ómerktir. ${miss} merktir „Vantar“.` : (miss ? `Allt yfirfarið. ${miss} hlutir vantar.` : "Allt yfirfarið og allur búnaður til staðar."))
+    + (pc.total ? ` Rafhlöðu-/eldsneytisstaða: ${pc.good} í lagi, ${pc.bad} ekki í lagi, ${pc.open} ómerkt.` : "");
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.classList.contains("st")) { const id=b.dataset.id; S.status[id] = S.status[id]===b.dataset.v ? undefined : b.dataset.v; if(!S.status[id]) delete S.status[id]; save(); paint(); if(S.status[id]==="miss") $("note-"+id).focus(); }
+  else if (b.dataset.p) { const id=b.dataset.p; S.power[id] = S.power[id]===b.dataset.v ? undefined : b.dataset.v; if(!S.power[id]) delete S.power[id]; save(); paint(); if(S.power[id]==="bad") $("note-"+id).focus(); }
+  else if (b.dataset.f) { S.fuel = S.fuel===b.dataset.f ? "" : b.dataset.f; save(); paint(); }
+  else if (b.dataset.sec) { const si=+b.dataset.sec; V.sections[si].items.forEach((_,ii)=>{ const id=si+"-"+ii; if(!S.status[id]) S.status[id]="ok"; }); save(); paint(); }
+});
+document.addEventListener("input", e => { if (e.target.id && e.target.id.startsWith("note-")) { S.notes[e.target.dataset.id] = e.target.value; save(); } });
+
+function fmtDate(d){ const p=(d||"").split("-"); return p.length===3 ? `${+p[2]}.${+p[1]}.${p[0]}` : d; }
+function powerCounts(){
+  const pw = all.filter(a=>a.it[3] && S.status[a.id]!=="miss");
+  const good = pw.filter(a=>S.power[a.id]==="good").length, bad = pw.filter(a=>S.power[a.id]==="bad").length;
+  return {total:pw.length, good, bad, open:pw.length-good-bad};
+}
+function powerLines(){
+  const out=[]; all.filter(a=>a.it[3] && S.status[a.id]!=="miss" && S.power[a.id]==="bad").forEach(a=>
+    out.push(`- ${a.it[0]} (${V.sections[a.si].name}): ${a.it[3]==="fuel"?"eldsneyti":"rafhlaða"} ekki í lagi${S.notes[a.id]?` – ${S.notes[a.id]}`:""}`));
+  return out;
+}
+function missingLines(){
+  const out=[]; V.sections.forEach((sec,si)=>{ const m=sec.items.map((it,ii)=>[it,si+"-"+ii]).filter(([,id])=>S.status[id]==="miss");
+    if(m.length){ out.push(sec.name.toUpperCase()); m.forEach(([it,id])=>out.push(`- ${it[0]}${it[1]?` (${it[1]})`:""}${S.notes[id]?` – ${S.notes[id]}`:""}`)); out.push(""); } });
+  return out;
+}
+function subject(){ return `Búnaðarlisti ${V.call} ${V.unit} (${V.plate}) – ${fmtDate($("date").value)}`; }
+function fullText(){
+  const n=all.length, ok=all.filter(a=>S.status[a.id]==="ok").length, miss=all.filter(a=>S.status[a.id]==="miss").length;
+  const m = missingLines();
+  return [subject(), `Skráð af: ${$("who").value||"—"}`, `Eldsneyti bíls: ${S.fuel||"Ekki skráð"}${(S.fuel==="Undir 1/4"||S.fuel==="1/4")?" – FYLLA ÞARF Á":""}`, `Yfirfarið: ${ok+miss}/${n} · Til staðar: ${ok} · Vantar: ${miss}`, "",
+    m.length ? "VANTAR:" : "Ekkert merkt „Vantar“.", "", ...m,
+    ...(powerLines().length ? ["RAFHLÖÐU-/ELDSNEYTISSTAÐA EKKI Í LAGI:", ...powerLines(), ""] : []),
+    ...(powerCounts().open ? [`Rafhlöðu-/eldsneytisstaða ómerkt: ${powerCounts().open} tæki`] : []),
+    ...(n-ok-miss ? [`Ómerkt: ${n-ok-miss} hlutir`] : [])].join("\n").trim();
+}
+function showText(msg, warn){ const t=$("out"); t.value=fullText(); t.hidden=false; const m=$("mailmsg"); m.textContent=msg; m.className="msg"+(warn?" warn":""); m.hidden=false; }
+async function copy(){
+  const txt = fullText();
+  try { await navigator.clipboard.writeText(txt); showText("Samantekt afrituð. Límdu hana inn í póst eða skilaboð."); }
+  catch(e){ showText("Ekki tókst að afrita sjálfkrafa. Textinn er valinn hér fyrir neðan, afritaðu hann handvirkt og sendu á " + TO + ".", true); $("out").select(); }
+}
+$("copy").addEventListener("click", copy);
+$("mail").addEventListener("click", () => {
+  const url = `mailto:${TO}?subject=${encodeURIComponent(subject())}&body=${encodeURIComponent(fullText())}`;
+  if (url.length > 1800) { showText("Listinn er of langur fyrir tölvupósthlekk. Smelltu á „Afrita samantekt“ og límdu textann inn í póst til " + TO + ".", true); return; }
+  showText("Reyni að opna póstforritið. Ef ekkert gerist, notaðu „Afrita samantekt“ og límdu textann inn í póst til " + TO + ".");
+  window.location.href = url;
+});
+$("reset").addEventListener("click", ()=>{ $("confirm").hidden=false; });
+$("no").addEventListener("click", ()=>{ $("confirm").hidden=true; });
+$("yes").addEventListener("click", ()=>{ S.status={}; S.notes={}; S.power={}; S.fuel=""; S.date=iso; $("date").value=iso; save(); $("confirm").hidden=true; $("out").hidden=true; $("mailmsg").hidden=true; paint(); });
+paint();
+</script>
+
+</html>
