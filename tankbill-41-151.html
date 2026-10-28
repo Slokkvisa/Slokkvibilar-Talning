@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b3201b">
+<meta name="apple-mobile-web-app-title" content="Slökkvibílar">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <style>[hidden]{display:none!important}body{margin:0}</style>
 <title>Búnaður 41-151 Tankari</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -44,8 +51,9 @@ main.wrap{padding-block:16px 32px;display:flex;flex-direction:column;gap:14px}
 .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .meta label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 input[type=text],input[type=date],input[type=email]{font:inherit;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%;min-width:0}
-.back{color:var(--red);font-weight:600;text-decoration:none;font-size:14px}
-.back:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.back{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;color:var(--red);background:#fff;font-weight:700;font-size:17px;text-decoration:none;padding:8px 14px;border-radius:6px;min-height:40px}
+.back:hover{text-decoration:underline}
+.back:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .intro{font-size:13px;color:var(--muted);margin:0}
 section.comp{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .comp>h2{margin:0;display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:.02em;text-wrap:balance}
@@ -87,6 +95,36 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--red);outline-of
 .seg button:last-child{border-radius:0 6px 6px 0;font-size:14px;flex:1.6}
 .seg button[aria-pressed=true]{background:var(--fg);border-color:var(--fg);color:var(--bg);position:relative}
 .fuel .msg{flex-basis:100%}
+.tabs{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;align-self:flex-start}
+.tabs button{border:0;border-radius:999px;padding:8px 16px;font-weight:600;font-size:14.5px;background:transparent;color:var(--muted)}
+.tabs button[aria-selected=true]{background:var(--red);color:var(--red-ink)}
+.view{display:flex;flex-direction:column;gap:14px}
+.view[hidden]{display:none}
+.hist{display:flex;flex-direction:column;gap:8px}
+.hrow{display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:12px 14px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.hrow:hover{border-color:var(--muted)}
+.hmain{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.hdate{font-family:var(--display);font-weight:700;font-size:20px}
+.hwho{font-size:13px;color:var(--muted)}
+.hflags{display:flex;gap:6px;flex-wrap:wrap}
+.flag{font-size:12px;padding:1px 7px;border-radius:4px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+.flag.miss{background:var(--miss-bg);border-color:var(--miss);color:var(--miss)}
+.flag.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.hnum{font-family:var(--mono);font-size:17px;font-variant-numeric:tabular-nums;color:var(--miss)}
+.hnum.good{color:var(--ok)}
+#hist-detail{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+#hist-detail[hidden]{display:none}
+#hist-body{align-self:stretch}
+.hcard{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.hcard h2{margin:0 0 8px;font-family:var(--display);font-size:24px}
+.hcard h2.sub{font-size:19px;margin-top:16px}
+.hcard h3{margin:10px 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.hcard ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.hcard dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:14px}
+.hcard dt{color:var(--muted)}
+.hcard dd{margin:0}
+.bad{color:var(--miss)}
+.hnote{display:block;font-size:13px;color:var(--muted)}
 .msg.warn{color:var(--miss);font-weight:500}
 textarea{width:100%;min-height:140px;font:13px/1.4 var(--mono);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px}
 @media (max-width:480px){
@@ -100,6 +138,7 @@ textarea{width:100%;min-height:140px;font:13px/1.4 var(--mono);color:var(--fg);b
 
 <header class="band">
   <div class="wrap">
+    <a class="back" href="index.html">← Allir bílar</a>
     <div class="idrow">
       <span class="call" id="call"></span>
       <span class="unit" id="unit"></span>
@@ -113,7 +152,11 @@ textarea{width:100%;min-height:140px;font:13px/1.4 var(--mono);color:var(--fg);b
 </header>
 
 <main class="wrap">
-  <a class="back" href="index.html">← Allir bílar</a>
+  <div class="tabs" role="tablist" aria-label="Sýn">
+    <button role="tab" id="tab-list" aria-selected="true" aria-controls="view-list">✓ Gátlisti</button>
+    <button role="tab" id="tab-hist" aria-selected="false" aria-controls="view-hist">⏱ Saga</button>
+  </div>
+  <div id="view-list" role="tabpanel" aria-labelledby="tab-list" class="view">
   <p class="intro">Hægri og vinstri hlið miðast við akstursstefnu. Merktu hvern hlut „Til staðar“ eða „Vantar“. Staðan vistast í þessum vafra.</p>
   <div class="meta">
     <label for="who">Skráð af<input type="text" id="who" autocomplete="name" placeholder="Nafn"></label>
@@ -128,29 +171,37 @@ textarea{width:100%;min-height:140px;font:13px/1.4 var(--mono);color:var(--fg);b
       <button data-f="3/4" aria-pressed="false">¾</button>
       <button data-f="Fullur" aria-pressed="false">Fullur</button>
     </div>
-    <p class="msg warn" id="fuelwarn" hidden>Lítið eldsneyti. Fylla þarf á bílinn.</p>
+    <p class="msg warn" id="fuelwarn" hidden>Bíllinn er ekki fullur. Taka þarf eldsneyti.</p>
   </section>
   <div id="list"></div>
 
   <section class="actions" aria-labelledby="ah">
-    <h2 id="ah">Senda niðurstöðu</h2>
+    <h2 id="ah">Vista og senda</h2>
     <p class="msg" id="summary"></p>
-    <p class="msg">Sendist á <strong class="addr">slokkvilid@isafjordur.is</strong></p>
+    <p class="msg">Yfirferðin vistast í sögu og skýrslan sendist á <strong class="addr">slokkvilid@isafjordur.is</strong></p>
     <div class="row">
-      <button class="primary" id="mail">Senda lista yfir það sem vantar</button>
+      <button class="primary" id="mail">Vista og senda skýrslu</button>
       <button id="copy">Afrita samantekt</button>
     </div>
     <p class="msg" id="mailmsg" hidden></p>
     <textarea id="out" readonly hidden aria-label="Samantekt"></textarea>
     <div class="row">
-      <button id="reset" class="small">Hreinsa allar merkingar</button>
+      <button id="reset" class="small">Hreinsa allar merkingar</button><span class="msg">Nafnið helst inni.</span>
       <span id="confirm" hidden class="row"><span class="msg warn">Hreinsa allt?</span><button id="yes" class="small">Já, hreinsa</button><button id="no" class="small">Hætta við</button></span>
     </div>
   </section>
+  </div>
+  <div id="view-hist" role="tabpanel" aria-labelledby="tab-hist" class="view" hidden>
+    <div id="hist-list" class="hist"></div>
+    <div id="hist-detail" hidden>
+      <button id="hist-back">← Til baka í sögu</button>
+      <div id="hist-body"></div>
+    </div>
+  </div>
 </main>
 
 <script>
-const V = {"call": "41-151", "plate": "KO-750", "unit": "Tankari", "sections": [{"name": "Ökumannshús", "items": [["Tetra handstöð", "1", ""], ["VHF handstöð", "1", ""], ["Hanakort", "1", ""], ["sexkanntasett", "1", ""], ["Eldsneytiskort", "1", ""]]}, {"name": "Vinstri hlið skápur 1", "items": [["4” slanga", "1", ""], ["3” slanga", "3", ""], ["2” slanga", "2", ""]]}, {"name": "Hægri hlið skápur 1", "items": [["Stútur", "3", ""], ["Barkasigti", "1", ""], ["Greinistykki", "2", ""], ["tvígengis olía", "1 brúsi", ""], ["B/C tengi", "3", ""], ["Flatt skrúfjárn", "1", ""], ["slaghamar", "1", ""], ["Rörtöng", "1", ""], ["Skiptilykill", "1", ""], ["Stortz lykill stór", "1 sett", ""], ["Stortz lykill lítill", "2 sett", ""], ["Trekt fyrir bensín á dælu", "1", ""]]}, {"name": "Dælurými aftast", "items": [["D/C tengi", "1", ""], ["3” stutt slanga", "1", ""], ["4” stutt slanga", "1", ""], ["Tröppur", "1", ""], ["Stútur langur", "1", ""], ["Exi", "1", ""], ["Stortz lyklar stórir", "2 sett", ""]]}]};
+const V = {"call": "41-151", "plate": "KO-750", "unit": "Tankari", "sections": [{"name": "Ökumannshús", "items": [["Tetra handstöð", "1", ""], ["VHF handstöð", "1", ""], ["Hanakort", "1", ""], ["Sexkantasett", "1", ""], ["Eldsneytiskort", "1", ""]]}, {"name": "Vinstri hlið skápur 1", "items": [["4” slanga", "1", ""], ["3” slanga", "3", ""], ["2” slanga", "2", ""]]}, {"name": "Hægri hlið skápur 1", "items": [["Stútur", "3", ""], ["Barkasigti", "1", ""], ["Greinistykki", "2", ""], ["Tvígengisolía", "1 brúsi", ""], ["B/C tengi", "3", ""], ["Flatt skrúfjárn", "1", ""], ["Slaghamar", "1", ""], ["Rörtöng", "1", ""], ["Skiptilykill", "1", ""], ["Storz-lykill, stór", "1 sett", ""], ["Storz-lykill, lítill", "2 sett", ""], ["Trekt fyrir bensín á dælu", "1", ""]]}, {"name": "Dælurými aftast", "items": [["D/C tengi", "1", ""], ["3” stutt slanga", "1", ""], ["4” stutt slanga", "1", ""], ["Tröppur", "1", ""], ["Stútur langur", "1", ""], ["Exi", "1", ""], ["Storz-lyklar, stórir", "2 sett", ""]]}]};
 const KEY = "bunadur-" + V.call;
 const TO = "slokkvilid@isafjordur.is";
 let S = {status:{}, notes:{}, power:{}, who:"", date:"", fuel:""};
@@ -159,9 +210,14 @@ function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} 
 const $ = id => document.getElementById(id);
 $("call").textContent = V.call; $("unit").textContent = V.unit; $("plate").textContent = V.plate;
 const today = new Date(); const iso = today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
+const NAME_KEY = "bunadur-nafn", HIST_KEY = "bunadur-saga-" + V.call;
+if (!S.who) { try { S.who = localStorage.getItem(NAME_KEY) || ""; } catch(e){} }
 $("date").value = S.date || iso; $("who").value = S.who;
-["who","date"].forEach(k => $(k).addEventListener("input", e => { S[k] = e.target.value; save(); }));
+["who","date"].forEach(k => $(k).addEventListener("input", e => { S[k] = e.target.value; save(); if (k==="who") { try{ localStorage.setItem(NAME_KEY, e.target.value); }catch(err){} } }));
+function getHist(){ try { return JSON.parse(localStorage.getItem(HIST_KEY)||"[]"); } catch(e){ return []; } }
+function setHist(h){ try { localStorage.setItem(HIST_KEY, JSON.stringify(h.slice(0,200))); return true; } catch(e){ return false; } }
 
+const needFuel = f => !!f && f!=="Fullur";
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const all = [];
 V.sections.forEach((sec, si) => {
@@ -206,7 +262,7 @@ function paint(){
     $("c"+si).textContent = done+"/"+ids.length;
   });
   document.querySelectorAll("#fuel button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.f===S.fuel)));
-  $("fuelwarn").hidden = !(S.fuel==="Undir 1/4" || S.fuel==="1/4");
+  $("fuelwarn").hidden = !needFuel(S.fuel);
   const n = all.length;
   $("bok").style.width = (ok/n*100)+"%"; $("bmiss").style.width = (miss/n*100)+"%";
   $("progtxt").textContent = `${ok+miss}/${n} yfirfarið · ${miss} vantar`;
@@ -243,7 +299,7 @@ function subject(){ return `Búnaðarlisti ${V.call} ${V.unit} (${V.plate}) – 
 function fullText(){
   const n=all.length, ok=all.filter(a=>S.status[a.id]==="ok").length, miss=all.filter(a=>S.status[a.id]==="miss").length;
   const m = missingLines();
-  return [subject(), `Skráð af: ${$("who").value||"—"}`, `Eldsneyti bíls: ${S.fuel||"Ekki skráð"}${(S.fuel==="Undir 1/4"||S.fuel==="1/4")?" – FYLLA ÞARF Á":""}`, `Yfirfarið: ${ok+miss}/${n} · Til staðar: ${ok} · Vantar: ${miss}`, "",
+  return [subject(), `Skráð af: ${$("who").value||"—"}`, `Eldsneyti bíls: ${S.fuel||"Ekki skráð"}${needFuel(S.fuel)?" – TAKA ÞARF ELDSNEYTI":""}`, `Yfirfarið: ${ok+miss}/${n} · Til staðar: ${ok} · Vantar: ${miss}`, "",
     m.length ? "VANTAR:" : "Ekkert merkt „Vantar“.", "", ...m,
     ...(powerLines().length ? ["RAFHLÖÐU-/ELDSNEYTISSTAÐA EKKI Í LAGI:", ...powerLines(), ""] : []),
     ...(powerCounts().open ? [`Rafhlöðu-/eldsneytisstaða ómerkt: ${powerCounts().open} tæki`] : []),
@@ -257,14 +313,65 @@ async function copy(){
 }
 $("copy").addEventListener("click", copy);
 $("mail").addEventListener("click", () => {
+  if (!$("who").value.trim()) { const m=$("mailmsg"); m.textContent="Skrifaðu nafn í „Skráð af“ áður en þú vistar."; m.className="msg warn"; m.hidden=false; $("who").focus(); return; }
+  const saved = saveRecord();
   const url = `mailto:${TO}?subject=${encodeURIComponent(subject())}&body=${encodeURIComponent(fullText())}`;
-  if (url.length > 1800) { showText("Listinn er of langur fyrir tölvupósthlekk. Smelltu á „Afrita samantekt“ og límdu textann inn í póst til " + TO + ".", true); return; }
-  showText("Reyni að opna póstforritið. Ef ekkert gerist, notaðu „Afrita samantekt“ og límdu textann inn í póst til " + TO + ".");
+  const pre = saved ? "Vistað í sögu. " : "Ekki tókst að vista í sögu í þessum vafra. ";
+  if (url.length > 1800) { showText(pre + "Listinn er of langur fyrir tölvupósthlekk. Smelltu á „Afrita samantekt“ og límdu textann inn í póst til " + TO + ".", true); return; }
+  showText(pre + "Reyni að opna póstforritið. Ef ekkert gerist, notaðu „Afrita samantekt“ og límdu textann inn í póst til " + TO + ".");
   window.location.href = url;
 });
+function saveRecord(){
+  const n=all.length, ok=all.filter(a=>S.status[a.id]==="ok").length, miss=all.filter(a=>S.status[a.id]==="miss").length;
+  const rec = { id: Date.now(), saved: new Date().toISOString(), date: $("date").value, who: $("who").value.trim(), fuel: S.fuel,
+    total:n, ok, miss, pc: powerCounts(),
+    missing: all.filter(a=>S.status[a.id]==="miss").map(a=>({sec:V.sections[a.si].name, name:a.it[0], qty:a.it[1], note:S.notes[a.id]||""})),
+    power: all.filter(a=>a.it[3] && S.status[a.id]!=="miss" && S.power[a.id]==="bad").map(a=>({sec:V.sections[a.si].name, name:a.it[0], kind:a.it[3], note:S.notes[a.id]||""})) };
+  const h = getHist(); h.unshift(rec); return setHist(h);
+}
+function showTab(which){
+  const hist = which==="hist";
+  $("view-list").hidden = hist; $("view-hist").hidden = !hist;
+  $("tab-list").setAttribute("aria-selected", String(!hist)); $("tab-hist").setAttribute("aria-selected", String(hist));
+  if (hist) { $("hist-detail").hidden = true; renderHist(); }
+}
+$("tab-list").addEventListener("click", ()=>showTab("list"));
+$("tab-hist").addEventListener("click", ()=>showTab("hist"));
+function fmtTime(s){ const d=new Date(s), p=n=>String(n).padStart(2,"0"); return `${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()} kl. ${p(d.getHours())}:${p(d.getMinutes())}`; }
+const lowFuel = needFuel;
+function renderHist(){
+  const h = getHist(), L = $("hist-list"); L.hidden = false;
+  if (!h.length) { L.innerHTML = `<p class="msg">Engar vistaðar yfirferðir enn. Yfirferð vistast hér þegar ýtt er á „Vista og senda skýrslu“.</p>`; return; }
+  L.innerHTML = h.map((r,i)=>{
+    const all_ok = r.ok===r.total && !r.pc.bad;
+    return `<button class="hrow" data-h="${i}">
+      <span class="hmain"><span class="hdate">${esc(fmtDate(r.date))}</span>
+        <span class="hwho">Skráð af: ${esc(r.who||"—")} · vistað ${esc(fmtTime(r.saved))}</span>
+        <span class="hflags">${r.miss?`<span class="flag miss">${r.miss} vantar</span>`:""}${r.pc.bad?`<span class="flag miss">${r.pc.bad} rafhl./eldsn. ekki í lagi</span>`:""}${lowFuel(r.fuel)?`<span class="flag miss">Taka þarf eldsneyti</span>`:""}${r.total-r.ok-r.miss?`<span class="flag">${r.total-r.ok-r.miss} ómerkt</span>`:""}${all_ok?`<span class="flag ok">Allt í lagi</span>`:""}</span></span>
+      <span class="hnum ${all_ok?"good":""}">${r.ok}/${r.total}</span></button>`; }).join("");
+}
+$("hist-list").addEventListener("click", e => {
+  const b = e.target.closest("[data-h]"); if (!b) return;
+  const r = getHist()[+b.dataset.h]; if (!r) return;
+  const grp = (arr, f) => { const g={}; arr.forEach(x=>{ (g[x.sec]=g[x.sec]||[]).push(x); }); return Object.entries(g).map(([s,xs])=>`<h3>${esc(s)}</h3><ul>${xs.map(f).join("")}</ul>`).join(""); };
+  $("hist-body").innerHTML = `<div class="hcard">
+    <h2>${esc(fmtDate(r.date))}</h2>
+    <dl>
+      <dt>Skráð af</dt><dd>${esc(r.who||"—")}</dd>
+      <dt>Vistað</dt><dd>${esc(fmtTime(r.saved))}</dd>
+      <dt>Eldsneyti bíls</dt><dd${lowFuel(r.fuel)?' class="bad"':""}>${esc(r.fuel||"Ekki skráð")}</dd>
+      <dt>Yfirfarið</dt><dd>${r.ok+r.miss}/${r.total} · til staðar ${r.ok} · vantar ${r.miss}</dd>
+      ${r.pc.total?`<dt>Rafhlaða/eldsneyti tækja</dt><dd>${r.pc.good} í lagi · ${r.pc.bad} ekki í lagi · ${r.pc.open} ómerkt</dd>`:""}
+    </dl>
+    ${r.missing.length?`<h2 class="sub bad">Vantar</h2>`+grp(r.missing, x=>`<li>${esc(x.name)}${x.qty?` <span class="qty">${esc(x.qty)}</span>`:""}${x.note?`<span class="hnote">${esc(x.note)}</span>`:""}</li>`):`<p class="msg">Ekkert merkt „Vantar“.</p>`}
+    ${r.power.length?`<h2 class="sub bad">Rafhlöðu-/eldsneytisstaða ekki í lagi</h2>`+grp(r.power, x=>`<li>${esc(x.name)} <span class="qty">${x.kind==="fuel"?"eldsneyti":"rafhlaða"}</span>${x.note?`<span class="hnote">${esc(x.note)}</span>`:""}</li>`):""}
+  </div>`;
+  $("hist-list").hidden = true; $("hist-detail").hidden = false; window.scrollTo(0,0);
+});
+$("hist-back").addEventListener("click", ()=>{ $("hist-detail").hidden = true; renderHist(); });
 $("reset").addEventListener("click", ()=>{ $("confirm").hidden=false; });
 $("no").addEventListener("click", ()=>{ $("confirm").hidden=true; });
-$("yes").addEventListener("click", ()=>{ S.status={}; S.notes={}; S.power={}; S.fuel=""; S.date=iso; $("date").value=iso; save(); $("confirm").hidden=true; $("out").hidden=true; $("mailmsg").hidden=true; paint(); });
+$("yes").addEventListener("click", ()=>{ S.status={}; S.notes={}; S.power={}; S.fuel=""; S.date=iso; /* nafn (S.who) helst inni */ $("date").value=iso; save(); $("confirm").hidden=true; $("out").hidden=true; $("mailmsg").hidden=true; paint(); });
 paint();
 </script>
 
